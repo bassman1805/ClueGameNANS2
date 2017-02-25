@@ -26,11 +26,11 @@ public class IntBoard {
 	public Set<BoardCell> getTargets()
 	{
 		
-		return 
+		return null;
 	}
 	
 	public Set<BoardCell> getAdjList()
 	{
-		
+		return null;
 	}
 }
