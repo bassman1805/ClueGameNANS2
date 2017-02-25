@@ -9,8 +9,11 @@ public class IntBoard {
 	private Map<BoardCell, Set<BoardCell>> adjMtx;
 	private Set<BoardCell> targets;
 
-	public IntBoard() {
+
+
+	public IntBoard(int rows, int cols) {
 		// TODO Auto-generated constructor stub
+		
 	}
 	
 	private void calcAdjacencies()
@@ -18,7 +21,7 @@ public class IntBoard {
 		
 	}
 
-	private void calcTargets(BoardCell startCel, int pathLength)
+	public void calcTargets(BoardCell startCel, int pathLength)
 	{
 		
 	}
@@ -29,8 +32,12 @@ public class IntBoard {
 		return null;
 	}
 	
-	public Set<BoardCell> getAdjList()
+	public Set<BoardCell> getAdjList( BoardCell cell)
 	{
+		return null;
+	}
+	public BoardCell getCell (int a, int b){
+		
 		return null;
 	}
 }
