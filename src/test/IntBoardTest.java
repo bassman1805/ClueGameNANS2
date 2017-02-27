@@ -14,16 +14,17 @@ import experiment.IntBoard;
 public class IntBoardTest {
 
 	IntBoard board;
-	int startRow = 0;
-	int startCol = 0;
-	
+	//Initial Position
 	@Before
 	public void setUp() throws Exception
 	{
-		board = new IntBoard(4,4);
+		board = new IntBoard(); // Board Size
 		
 	}
 	
+	
+
+
 	//@Test
 	public void test() {
 		fail("Not yet implemented");
@@ -32,26 +33,24 @@ public class IntBoardTest {
 	@Test
 	public void topLeftCorner()
 	{
-		BoardCell cell = board.getCell(startRow, startCol);
-		
-		System.out.print("Making sure getters are retuning the right cells: "+board.getCell(startRow, startCol).getRow() + "," + board.getCell(startRow, startCol).getRow());
+		BoardCell cell = board.getCell(0, 0); //Start location
 		Set<BoardCell> testList = board.getAdjList(cell);
 		assertTrue(testList.contains(board.getCell(1, 0)));
 		assertTrue(testList.contains(board.getCell(0, 1)));
 		assertEquals(2, testList.size());
 	}
 	
-	//@Test
+	@Test
 	public void bottomRightCorner()
 	{
-		BoardCell cell = board.getCell(3,3);
-		Set<BoardCell> testList = board.getAdjList(cell);
+		BoardCell cell = board.getCell(3, 3); //Start location
+		Set<BoardCell > testList = board.getAdjList(cell);
 		assertTrue(testList.contains(board.getCell(2, 3)));
 		assertTrue(testList.contains(board.getCell(3, 2)));
 		assertEquals(2, testList.size());
 	}
 	
-	//@Test
+	@Test
 	public void rightEdge()
 	{
 		BoardCell cell = board.getCell(1,3);
@@ -62,7 +61,7 @@ public class IntBoardTest {
 		assertEquals(3, testList.size());
 	}
 	
-	//@Test
+	@Test
 	public void leftEdge()
 	{
 		BoardCell cell = board.getCell(1,0);
@@ -73,7 +72,7 @@ public class IntBoardTest {
 		assertEquals(3, testList.size());
 	}
 	
-	//@Test
+	@Test
 	public void secondColumn()
 	{
 		BoardCell cell = board.getCell(2,1);
@@ -85,7 +84,7 @@ public class IntBoardTest {
 		assertEquals(4, testList.size());
 	}
 
-	//@Test
+	@Test
 	public void secondLastColumn()
 	{
 		BoardCell cell = board.getCell(2,2);
@@ -181,6 +180,7 @@ public class IntBoardTest {
 		assertTrue(targets.contains(board.getCell(3, 2)));
 	}
 	
+
 	
 	// Create at least six methods to test target creation 
 	// This part still needs to have the methods written. There is an example in the instructions.
