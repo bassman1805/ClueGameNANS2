@@ -2,8 +2,8 @@ package experiment;
 
 public class BoardCell {
 	
-	private int row;
-	private int col;
+	private int row = 0;
+	private int col = 0;
 
 	public BoardCell() {
 		// TODO Auto-generated constructor stub
@@ -12,11 +12,20 @@ public class BoardCell {
 
 	public BoardCell(int row, int col) {
 		super();
-		this.row = row;
+		this.row =row;
 		this.col = col;
+		
 	}
 
-	
+
+	public int getRow() {
+		return row;
+	}
+
+
+	public int getCol() {
+		return col;
+	}
 	
 	
 
