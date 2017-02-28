@@ -1,0 +1,11 @@
+L, Library, Card 	
+B, Brown H, Card	
+R, Rec Center, Card	
+E, Elm, Card	
+T, Trads,Card	
+S, Safeway, Card	
+C, CTLM, Card
+G, Green Center, Card	
+M, Mines, Card	
+X, Xcloset, Other
+Y, Ywalkway, other
