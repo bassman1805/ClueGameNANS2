@@ -15,6 +15,14 @@ public class BoardCell {
 		this.doorDirection = doorDirection.NONE;
 	}
 	
+	public BoardCell(int row, int col, char initial, boolean isDoorway)
+	{
+		this.row = row;
+		this.col = col;
+		this.initial = initial;
+		this.isDoorway = isDoorway;
+	}
+	
 	public boolean isWalkway(){
 		
 		return false;
