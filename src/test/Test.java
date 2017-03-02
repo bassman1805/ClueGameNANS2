@@ -15,7 +15,7 @@ public class Test {
 	// Constants that I will use to test whether the file was loaded correctly
 	public static final int LEGEND_SIZE = 11;
 	public static final int NUM_ROWS = 22;
-	public static final int NUM_COLUMNS = 23;
+	public static final int NUM_COLUMNS = 24;
 
 	private static Board board;
 	
@@ -31,7 +31,7 @@ public class Test {
 
 	@org.junit.Test
 	public void test() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 	
 	
@@ -127,7 +127,7 @@ public class Test {
 		}
 		
 		// Tests to see if the counted number of doors equals the expected number of doors (17)
-		assertEquals(17, numDoors); 
+		assertEquals(19, numDoors); 
 	}
 	
 	// This will test that the correct initials are assigned to a room cell
@@ -155,8 +155,8 @@ public class Test {
 		assertEquals('W', board.getCellAt(0, 3).getInitial());
 		
 		// Test a closet
-		// Location 1,4 should have initial = 'X'
-		assertEquals('X', board.getCellAt(1, 4));
+		// Location 1,5 should have initial = 'X'
+		assertEquals('X', board.getCellAt(1, 4).getInitial());
 	}
 
 }

@@ -10,8 +10,8 @@ import com.sun.javafx.collections.MappingChange.Map;
 
 public class Board {
 
-	private int numRows;
-	private int numColumns;
+	private int numRows = 22;
+	private int numColumns = 24;
 	public final int MAX_BOARD_SIZE = 50;
 	private BoardCell[][] board = new BoardCell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
 	private HashMap<Character, String> legend;
@@ -46,11 +46,13 @@ public class Board {
 
 	public int getNumRows()
 	{
+		//System.out.println(board.length);
 		return numRows;
 	}
 
 	public int getNumColumns()
 	{
+		//System.out.println(board[0].length);
 		return numColumns;
 	}
 
@@ -71,20 +73,20 @@ public class Board {
 	{
 		// Create the legend map
 		this.legend = new HashMap<Character, String>();
-		
+
 		try {
 			FileReader reader = new FileReader(roomConfigFile);
-	        Scanner in = new Scanner(reader);
-	        
-	        while(in.hasNextLine())
-	        {
-	        	String line = in.nextLine();
-	        	String initialAsString = line.substring(0,1);
-	        	Character initial = initialAsString.charAt(0);
-	        	String name = line.substring(3, line.lastIndexOf(','));
-	        	legend.put(initial, name);
-	        }
-	        
+			Scanner in = new Scanner(reader);
+
+			while(in.hasNextLine())
+			{
+				String line = in.nextLine();
+				String initialAsString = line.substring(0,1);
+				Character initial = initialAsString.charAt(0);
+				String name = line.substring(3, line.lastIndexOf(','));
+				legend.put(initial, name);
+			}
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println(roomConfigFile + " was not found");
@@ -105,18 +107,30 @@ public class Board {
 				for(int i = 0; i < lineArr.length; i++)
 				{
 					String initial = lineArr[i];
-					if(initial.length() > 1)
+					BoardCell newCell = new BoardCell(row, i, initial.charAt(0), false);
+					board[row][i] = newCell;
+
+					if(initial.length() > 1 && initial.charAt(1) != 'N')
 					{
-						BoardCell newCell = new BoardCell(row, i, initial.substring(0, 1).charAt(0), true);
-					}
-					else
-					{
-						
+						board[row][i].setIsDoorway();
+						board[row][i].setDoorDirection(initial.charAt(1));
 					}
 				}
-				
+
 				row++;
+				// Subtract 1 from the number of columns because it is zero indexed
+				this.numColumns = lineArr.length;
 			}
+			// Subtract 1 from the number of rows because it is zero indexed
+			this.numRows = row;
+
+			/*for (int i = 0; i < 23; i++){
+				for (int k = 0; k < 24; k++){
+					System.out.print("[" + board[i][k].getRow() +","+ board[i][k].getCol()  + "]");
+					
+				}
+				System.out.println();
+			}*/
 		}catch(FileNotFoundException e)
 		{
 			System.out.println(boardConfigFile + " was not found");
