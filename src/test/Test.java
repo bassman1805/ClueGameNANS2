@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.BeforeClass;
@@ -23,7 +24,7 @@ public class Test {
 		// Board is singleton, get the only instance
 		board = Board.getInstance();
 		// set the file names to use my config files
-		board.setConfigFiles("ClueLayoutCSV.csv", "Legend.txt");		
+		board.setConfigFiles("ClueLayoutCSV.csv", "Legends.txt");		
 		// Initialize will load BOTH config files 
 		board.initialize();
 	}
@@ -39,10 +40,10 @@ public class Test {
 	public void testLegend()
 	{
 		// Get the map of the initial legend
-		Map<Character, String> legend = (Map<Character, String>) board.getLegend(); 
+		HashMap<Character, String> legend = board.getLegend(); 
 		
 		// Make sure the correct number of rooms is read
-		assertEquals(legend.size(), LEGEND_SIZE);
+		assertEquals(LEGEND_SIZE, legend.size());
 		
 		// Test each key to make sure the keys are mapped to the correct rooms - tests every room/key combination
 		assertEquals("Library", legend.get('L'));
