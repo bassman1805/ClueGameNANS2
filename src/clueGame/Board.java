@@ -15,7 +15,7 @@ public class Board {
 	public final int MAX_BOARD_SIZE = 50;
 	private BoardCell[][] board = new BoardCell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
 	private HashMap<Character, String> legend;
-	private Map<BoardCell, Set<BoardCell>> adjMatrix;
+	private HashMap<BoardCell, Set<BoardCell>> adjMatrix;
 	private Set<BoardCell> targets;
 	private String boardConfigFile;
 	private String roomConfigFile;
@@ -59,6 +59,11 @@ public class Board {
 	public BoardCell getCellAt(int row, int col)
 	{
 		return board[row][col];
+	}
+	
+	public Set<BoardCell> getAdjList(int row, int col)
+	{
+		return adjMatrix.get(board[row][col]);
 	}
 
 	/////////////////// HELPER FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\
@@ -142,9 +147,14 @@ public class Board {
 
 	}
 
-	public void calcTargets(BoardCell cell, int pathLength)
+	public void calcTargets(int row, int col, int pathLength)
 	{
 
+	}
+	
+	public Set<BoardCell> getTargets()
+	{
+		return null;
 	}
 
 }
