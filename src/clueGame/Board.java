@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Set;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 import com.sun.javafx.collections.MappingChange.Map;
 
@@ -17,6 +18,7 @@ public class Board {
 	private HashMap<Character, String> legend;
 	private HashMap<BoardCell, Set<BoardCell>> adjMatrix;
 	private Set<BoardCell> targets;
+	private Set<BoardCell> visitedTargets;
 	private String boardConfigFile;
 	private String roomConfigFile;
 
@@ -60,7 +62,7 @@ public class Board {
 	{
 		return board[row][col];
 	}
-	
+
 	public Set<BoardCell> getAdjList(int row, int col)
 	{
 		return adjMatrix.get(board[row][col]);
@@ -71,7 +73,7 @@ public class Board {
 	{
 		loadRoomConfig();
 		loadBoardConfig();
-		calcAdjacencies();	
+		calcAdjacencies();
 	}
 
 	public void loadRoomConfig()
@@ -104,7 +106,7 @@ public class Board {
 			FileReader reader = new FileReader(boardConfigFile);
 			Scanner in = new Scanner(reader);
 			int row = 0;
-			
+
 			while(in.hasNext())
 			{
 				String line = in.next();
@@ -132,7 +134,7 @@ public class Board {
 			/*for (int i = 0; i < 23; i++){
 				for (int k = 0; k < 24; k++){
 					System.out.print("[" + board[i][k].getRow() +","+ board[i][k].getCol()  + "]");
-					
+
 				}
 				System.out.println();
 			}*/
@@ -144,17 +146,129 @@ public class Board {
 
 	public void calcAdjacencies()
 	{
+		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
 
+		for(int i = 0; i < numRows; i++)
+		{
+			for(int j = 0; j < numColumns; j++)
+			{
+				HashSet<BoardCell> adjList = new HashSet<BoardCell>();
+
+				// Adding walkways to adjList if they are within the board
+				if((j-1 > -1) && board[i][j-1].isWalkway() && !board[i][j].isDoorway() && !board[i][j].isRoom() && !board[i][j].isCloset())
+				{
+					adjList.add(board[i][j-1]);
+				}
+
+				if((j+1 < numColumns) && board[i][j+1].isWalkway() && !board[i][j].isDoorway() && !board[i][j].isRoom() && !board[i][j].isCloset())
+				{
+					adjList.add(board[i][j+1]);
+				}
+
+				if((i+1 < numRows) && board[i+1][j].isWalkway() && !board[i][j].isDoorway() && !board[i][j].isRoom() && !board[i][j].isCloset()) 
+				{
+					adjList.add(board[i+1][j]);
+				}
+
+				if((i-1 > -1) && board[i-1][j].isWalkway() && !board[i][j].isDoorway() && !board[i][j].isRoom() && !board[i][j].isCloset()) 
+				{
+					adjList.add(board[i-1][j]);
+				}
+
+				// Add doorway to adjList if it has the correct direction
+				if((j-1 > -1)  &&  board[i][j-1].getDoorDirection() == DoorDirection.RIGHT)
+				{
+					adjList.add(board[i][j-1]);
+				}
+				if((j+1<numColumns) && board[i][j+1].getDoorDirection() == DoorDirection.LEFT)
+				{
+					adjList.add(board[i][j+1]);
+				}
+				if((i+1<numRows) && board[i+1][j].getDoorDirection() == DoorDirection.UP)
+				{
+					adjList.add(board[i+1][j]);
+				}
+				if((i-1>-1) && board[i-1][j].getDoorDirection() == DoorDirection.DOWN)
+				{
+					adjList.add(board[i-1][j]);
+				}
+
+				// Add adjList for doorways based on door direction
+				if(board[i][j].isDoorway())
+				{
+					DoorDirection direction = board[i][j].getDoorDirection();
+					if(direction == DoorDirection.LEFT)
+					{
+						adjList.add(board[i][j-1]);
+					}
+					else if(direction == DoorDirection.RIGHT)
+					{
+						adjList.add(board[i][j+1]);
+					}
+					else if(direction == DoorDirection.UP)
+					{
+						adjList.add(board[i-1][j]);
+					}
+					else if(direction == DoorDirection.DOWN)
+					{
+						adjList.add(board[i+1][j]);
+					}
+				}
+
+
+				adjMatrix.put(board[i][j], adjList);
+
+			}
+		}
 	}
 
 	public void calcTargets(int row, int col, int pathLength)
 	{
-
+		
+		visitedTargets = new HashSet<BoardCell>();
+		targets = new HashSet<BoardCell>();
+		visitedTargets.add(board[row][col]);
+		calcTargetsRecursive(row, col, pathLength);
 	}
 	
+	/* GIVEN PSUEDOCODE
+	 * Parameters: thisCell and numSteps
+
+	for each adjCell in adjacentCells 
+	-- if already in visited list, skip rest of this
+
+	-- add adjCell to visited list 
+	-- if numSteps == 1, add adjCell to Targets
+	-- else call findAllTargets with adjCell, numSteps-1
+
+	-- remove adjCell from visited list
+	 */
+	public void calcTargetsRecursive(int row, int col, int pathLength)
+	{
+		Set<BoardCell> adjList = getAdjList(row,col);
+
+		for(BoardCell bc : adjList)
+		{
+			if(!visitedTargets.contains(bc)){
+				visitedTargets.add(bc);
+
+				if(pathLength == 1 || bc.isDoorway())
+				{
+					targets.add(bc);
+				}
+				else
+				{
+					calcTargetsRecursive(bc.getRow(), bc.getCol(), pathLength - 1);
+				}
+
+				visitedTargets.remove(bc);
+			}
+		}
+	}
+
 	public Set<BoardCell> getTargets()
 	{
-		return null;
+		return targets;
 	}
 
 }

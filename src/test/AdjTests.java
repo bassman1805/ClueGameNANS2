@@ -19,13 +19,13 @@ public class AdjTests {
 		// Board is singleton, get the only instance and initialize it		
 		board = Board.getInstance();
 		// set the file names to use my config files
-		board.setConfigFiles("ClueLayoutCVS.csv", "Legends.txt");		
+		board.setConfigFiles("ClueLayoutCSV.csv", "Legends.txt");		
 		board.initialize();
 	}
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	// These tests ensure that the player cannot move around inside a room (ie. the adjacency list is 0)
@@ -131,7 +131,7 @@ public class AdjTests {
 		// Cell (6, 13)
 		// Target cells the doorway (6,14), and walkways (7,13), (6,12)
 		// Adj list should be size 3
-		testList = board.getAdjList(6, 14);
+		testList = board.getAdjList(6, 13);
 		assertEquals(3, testList.size());
 		assertTrue(testList.contains(board.getCellAt(6, 14)));
 		assertTrue(testList.contains(board.getCellAt(7, 13)));
@@ -173,8 +173,8 @@ public class AdjTests {
 		Set<BoardCell> testList = board.getAdjList(0, 8);
 		assertEquals(3, testList.size());
 		assertTrue(testList.contains(board.getCellAt(0, 7)));
-		assertTrue(testList.contains(board.getCellAt(2, 8)));
-		assertTrue(testList.contains(board.getCellAt(1, 9)));
+		assertTrue(testList.contains(board.getCellAt(1, 8)));
+		assertTrue(testList.contains(board.getCellAt(0, 9)));
 		
 		// Tests a cell with just one adj walkway piece
 		// Cell (0,15)
@@ -197,7 +197,7 @@ public class AdjTests {
 		// Expected Targets: (8,17), (7,18), (8,19), (9,18)
 		// Adj list size should be 4
 		testList = board.getAdjList(8, 18);
-		assertEquals(3, testList.size());
+		assertEquals(4, testList.size());
 		assertTrue(testList.contains(board.getCellAt(8, 17)));
 		assertTrue(testList.contains(board.getCellAt(7, 18)));
 		assertTrue(testList.contains(board.getCellAt(8, 19)));
@@ -230,7 +230,7 @@ public class AdjTests {
 		assertEquals(3, testList.size());
 		assertTrue(testList.contains(board.getCellAt(7, 13)));
 		assertTrue(testList.contains(board.getCellAt(8, 14)));
-		assertTrue(testList.contains(board.getCellAt(8, 15)));
+		assertTrue(testList.contains(board.getCellAt(7, 15)));
 	}
 	
 	// This will test targets 1 step away and at the edge of the board
@@ -352,7 +352,7 @@ public class AdjTests {
 		// Expected 2 targets: doorway (18,20), walkway (17,19)
 		board.calcTargets(21, 18, 5);
 		targets = board.getTargets();
-		assertEquals(5, targets.size());
+		assertEquals(2, targets.size());
 		assertTrue(targets.contains(board.getCellAt(18, 20)));
 		assertTrue(targets.contains(board.getCellAt(17, 19)));
 	}

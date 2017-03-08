@@ -35,11 +35,23 @@ public class BoardCell {
 	}
 
 	public boolean isRoom(){
-		if(initial != 'W' && initial != 'X')
+		if(initial != 'W' && initial != 'X' && !isDoorway)
 		{
 			return true;
 		}
 		else
+		{
+			return false;
+		}
+	}
+	
+	public boolean isCloset()
+	{
+		if(initial == 'X')
+		{
+			return true;
+		}
+		else 
 		{
 			return false;
 		}
