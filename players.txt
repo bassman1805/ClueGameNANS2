@@ -1,0 +1,6 @@
+Cicero, purple, 4, 4
+Erandur, blue, 9, 6
+Lydia, green, 4, 11
+J'zargo, yellow, 15, 8
+Farkas, orange, 10, 20
+Agmaer, red, 1, 7

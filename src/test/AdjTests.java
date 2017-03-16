@@ -19,7 +19,7 @@ public class AdjTests {
 		// Board is singleton, get the only instance and initialize it		
 		board = Board.getInstance();
 		// set the file names to use my config files
-		board.setConfigFiles("ClueLayoutCSV.csv", "Legends.txt");		
+		board.setConfigFiles("ClueLayout_MRFS.csv", "Legend_MRFS.txt");		
 		board.initialize();
 	}
 

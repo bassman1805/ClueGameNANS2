@@ -1,9 +1,11 @@
+
 package clueGame;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -16,11 +18,23 @@ public class Board {
 	public final int MAX_BOARD_SIZE = 50;
 	private BoardCell[][] board = new BoardCell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
 	private HashMap<Character, String> legend;
+	
 	private HashMap<BoardCell, Set<BoardCell>> adjMatrix;
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visitedTargets;
+	
 	private String boardConfigFile;
 	private String roomConfigFile;
+	private String weaponConfigFile;
+	private String personConfigFile;
+	
+	private ArrayList<Player> players;
+	
+	private ArrayList<String> playerCards;
+	private ArrayList<String> weaponCards;
+	private ArrayList<String> roomCards;
+	
+	private ArrayList<String> solution;
 
 
 	/////////////////// CONSTRUCTOR \\\\\\\\\\\\\\\\\\\\\\\
@@ -38,6 +52,14 @@ public class Board {
 	{
 		this.boardConfigFile = boardConfigFile;
 		this.roomConfigFile = legendFile;
+	}
+	
+	public void setConfigFiles(String boardConfigFile, String legendFile, String weaponFile, String personFile)
+	{
+		this.boardConfigFile = boardConfigFile;
+		this.roomConfigFile = legendFile;
+		this.weaponConfigFile = weaponFile;
+		this.personConfigFile = personFile;
 	}
 
 	/////////////////// GETTERS \\\\\\\\\\\\\\\\\\\\\\\
@@ -73,6 +95,8 @@ public class Board {
 	{
 		loadRoomConfig();
 		loadBoardConfig();
+		loadPersonConfig();
+		loadWeaponConfig();
 		calcAdjacencies();
 	}
 
@@ -142,6 +166,14 @@ public class Board {
 		{
 			System.out.println(boardConfigFile + " was not found");
 		}
+	}
+	
+	public void loadWeaponConfig(){
+		
+	}
+	
+	public void loadPersonConfig(){
+		
 	}
 
 	public void calcAdjacencies()
@@ -221,6 +253,11 @@ public class Board {
 			}
 		}
 	}
+	
+	public void dealCards() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	public void calcTargets(int row, int col, int pathLength)
 	{
@@ -269,6 +306,30 @@ public class Board {
 	public Set<BoardCell> getTargets()
 	{
 		return targets;
+	}
+	
+	public ArrayList<Player> getPlayers(){
+		return null;
+	}
+	
+	public ArrayList<String> getPlayerCards() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public ArrayList<String> getWeaponCards() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public ArrayList<String> getRoomCards() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public ArrayList<String> getSolution() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
