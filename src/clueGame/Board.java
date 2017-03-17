@@ -1,15 +1,19 @@
 
 package clueGame;
 
-import java.io.FileInputStream;
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.reflect.Field;
 import java.util.Set;
+import java.util.Stack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
-import com.sun.javafx.collections.MappingChange.Map;
+
+//for random choice
+import java.util.Random;
 
 public class Board {
 
@@ -33,15 +37,22 @@ public class Board {
 	private ArrayList<String> playerCards;
 	private ArrayList<String> weaponCards;
 	private ArrayList<String> roomCards;
+	private Stack<Card> deck;
 	
-	private ArrayList<String> solution;
+	private Solution solution;
 
 
 	/////////////////// CONSTRUCTOR \\\\\\\\\\\\\\\\\\\\\\\
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
 	// ctor is private to ensure only one can be created
-	private Board() {}
+	private Board() {
+		playerCards = new ArrayList<String>();
+		weaponCards = new ArrayList<String>();
+		roomCards = new ArrayList<String>();
+		players = new ArrayList<Player>();
+		deck = new Stack<Card>();
+	}
 	// this method returns the only Board
 	public static Board getInstance() {
 		return theInstance;
@@ -70,13 +81,11 @@ public class Board {
 
 	public int getNumRows()
 	{
-		//System.out.println(board.length);
 		return numRows;
 	}
 
 	public int getNumColumns()
 	{
-		//System.out.println(board[0].length);
 		return numColumns;
 	}
 
@@ -99,7 +108,7 @@ public class Board {
 		loadWeaponConfig();
 		calcAdjacencies();
 	}
-
+	
 	public void loadRoomConfig()
 	{
 		// Create the legend map
@@ -109,17 +118,24 @@ public class Board {
 			FileReader reader = new FileReader(roomConfigFile);
 			Scanner in = new Scanner(reader);
 
+			String line;
+			String[] splitLine;
+			String type, name;
 			while(in.hasNextLine())
 			{
-				String line = in.nextLine();
-				String initialAsString = line.substring(0,1);
-				Character initial = initialAsString.charAt(0);
-				String name = line.substring(3, line.lastIndexOf(','));
+				line = in.nextLine();
+				splitLine = line.split(", ");
+				Character initial = splitLine[0].charAt(0);
+				name = splitLine[1];
+				type = splitLine[2];
+				
 				legend.put(initial, name);
+				if (type.equalsIgnoreCase("card")){
+					roomCards.add(name);
+				}
 			}
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			System.out.println(roomConfigFile + " was not found");
 		}
 	}
@@ -169,11 +185,67 @@ public class Board {
 	}
 	
 	public void loadWeaponConfig(){
-		
+		//load in the weapon file
+		try {
+			FileReader reader = new FileReader(weaponConfigFile);
+			Scanner in = new Scanner(reader);
+			//read weapons into arraylist
+			while(in.hasNextLine())
+			{
+				String line = in.nextLine();
+				weaponCards.add(line);
+			}
+
+		} catch (FileNotFoundException e) {
+			System.out.println(weaponConfigFile + " was not found");
+		}
 	}
 	
+	//convert a String to Color
+	private Color convertColor(String strColor) {
+	    Color color; 
+	    try {     
+	        // We can use reflection to convert the string to a color
+	        Field field = Class.forName("java.awt.Color").getField(strColor.trim());     
+	        color = (Color)field.get(null); 
+	    } catch (Exception e) {  
+	        color = null; // Not defined  
+	    }
+	    return color;
+	}
+
+	
 	public void loadPersonConfig(){
-		
+		try {
+			FileReader reader = new FileReader(personConfigFile);
+			Scanner in = new Scanner(reader);
+
+			String line;
+			String[] splitLine;
+			String name;
+			Field field;
+			Color color;
+			int row, column;
+			Player p;
+			while(in.hasNextLine())
+			{
+				line = in.nextLine();
+				splitLine = line.split(", ");
+				name = splitLine[0];
+				
+				color = convertColor(splitLine[1]);
+				
+				row = Integer.parseInt(splitLine[2]);
+				column = Integer.parseInt(splitLine[3]);
+
+				playerCards.add(name);
+				p = new Player(name, color, row, column);
+				players.add(p);
+			}
+
+		} catch (FileNotFoundException e) {
+			System.out.println(personConfigFile + " was not found");
+		}
 	}
 
 	public void calcAdjacencies()
@@ -254,10 +326,125 @@ public class Board {
 		}
 	}
 	
-	public void dealCards() {
-		// TODO Auto-generated method stub
+	private void shuffle(){
+		Stack<Card> half1 = new Stack<Card>();
+		Stack<Card> half2 = new Stack<Card>();
 		
+		//Split the deck into 2 half-decks
+		Card tempCard;
+		for(int i=0; i < deck.size()/2; i++){
+			tempCard = deck.pop();
+			half1.push(tempCard);
+		}
+		for(int i=0; i < deck.size(); i++){
+			tempCard = deck.pop();
+			half2.push(tempCard);
+		}
+		
+		//now, riffle shuffle the half-decks by alternately adding a random (1-3)
+		//number of cards back to the main deck
+		Random rand = new Random();
+		int num;
+		while(!(half1.isEmpty() && half2.isEmpty())){
+			num = rand.nextInt(3)+1;
+			if(num > half1.size()){
+				num = half1.size();
+			}
+			for(int i=0; i < num; i++){
+				tempCard = half1.pop();
+				deck.push(tempCard);
+			}
+			
+			num = rand.nextInt(3)+1;
+			if(num > half2.size()){
+				num = half2.size();
+			}
+			for(int i=0; i < num; i++){
+				tempCard = half2.pop();
+				deck.push(tempCard);
+			}
+		}
 	}
+	
+	// this has been altered. look back over
+	public void dealCards() {
+		//make sure every player has an empty hand to start out with
+		//also empty the deck, if it has anything for some reason
+		for(Player p:players) p.emptyHand();
+		deck.clear();
+		
+		//declare cards and decks
+		Card c;
+		ArrayList<Card> roomDeck = new ArrayList<Card>();
+		ArrayList<Card> personDeck = new ArrayList<Card>();
+		ArrayList<Card> weaponDeck = new ArrayList<Card>();
+		
+		//populate mini-decks
+		for (String s : roomCards){
+			c = new Card(s, cardType.ROOM);
+			roomDeck.add(c);
+		}
+		for (String s : playerCards){
+			c = new Card(s, cardType.PERSON);
+			personDeck.add(c);
+		}
+		for (String s : weaponCards){
+			c = new Card(s, cardType.WEAPON);
+			weaponDeck.add(c);
+		}
+		
+		//pick a solution (using random number)
+		Random rand = new Random();
+		int i;
+		Card tempRoom, tempPerson, tempWeapon;
+		
+		i = rand.nextInt(roomDeck.size());
+		tempRoom = roomDeck.get(i);
+		roomDeck.remove(i);
+		
+		i = rand.nextInt(personDeck.size());
+		tempPerson = personDeck.get(i);
+		personDeck.remove(i);
+		
+		i = rand.nextInt(weaponDeck.size());
+		tempWeapon = weaponDeck.get(i);
+		weaponDeck.remove(i);
+		
+		solution = new Solution(tempPerson, tempRoom, tempWeapon);
+		
+		//combine mini-decks into big deck
+		for(Card card : roomDeck){
+			deck.push(card);
+		}
+		for(Card card : personDeck){
+			deck.push(card);
+		}
+		for(Card card : weaponDeck){
+			deck.push(card);
+		}
+		
+		//shuffle big deck using the above shuffle method. 5 shuffles seems good.
+		for(i=0; i < 5; i++){
+			this.shuffle();
+		}
+		
+		//deal cards
+		i=0;
+		while(!deck.isEmpty()){
+			players.get(i).addCard(deck.pop());
+			
+			//go to the next player
+			i++;
+			//if there is no next player, go back to player 0
+			if(i >= players.size()) i = 0;
+		}
+	}
+	
+	//for(Player p:players) p.emptyHand();
+	//ArrayList<Card> roomDeck;
+	//ArrayList<Card> personDeck;
+	//ArrayList<Card> weaponDeck;
+	
 
 	public void calcTargets(int row, int col, int pathLength)
 	{
@@ -309,27 +496,23 @@ public class Board {
 	}
 	
 	public ArrayList<Player> getPlayers(){
-		return null;
+		return players;
 	}
 	
 	public ArrayList<String> getPlayerCards() {
-		// TODO Auto-generated method stub
-		return null;
+		return playerCards;
 	}
 	
 	public ArrayList<String> getWeaponCards() {
-		// TODO Auto-generated method stub
-		return null;
+		return weaponCards;
 	}
 	
 	public ArrayList<String> getRoomCards() {
-		// TODO Auto-generated method stub
-		return null;
+		return roomCards;
 	}
 	
-	public ArrayList<String> getSolution() {
-		// TODO Auto-generated method stub
-		return null;
+	public Solution getSolution() {
+		return solution;
 	}
 
 }

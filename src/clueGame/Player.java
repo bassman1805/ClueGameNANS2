@@ -4,35 +4,51 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class Player {
-
+	String name;
+	Color playerColor;
+	int row;
+	int column;
+	
+	ArrayList<Card> hand;
+	
+	public Player(String name, Color playerColor, int row, int column){
+		this.name = name;
+		this.playerColor = playerColor;
+		this.row = row;
+		this.column = column;
+		hand = new ArrayList<Card>();
+	}
+	
+	public void emptyHand(){
+		hand.clear();
+	}
+	
+	public void addCard(Card newCard){
+		hand.add(newCard);
+	}
+	
 	public int numCards() {
-		// TODO Auto-generated method stub
-		return 0;
+		return hand.size();
 	}
 
 	public ArrayList<Card> getCards() {
-		// TODO Auto-generated method stub
-		return null;
+		return hand;
 	}
 
 	public Color getColor() {
-		// TODO Auto-generated method stub
-		return null;
+		return playerColor;
 	}
 
 	public Object getRow() {
-		// TODO Auto-generated method stub
-		return null;
+		return row;
 	}
 
 	public Object getCol() {
-		// TODO Auto-generated method stub
-		return null;
+		return column;
 	}
 
 	public Object getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 }
