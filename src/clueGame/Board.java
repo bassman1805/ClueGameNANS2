@@ -514,5 +514,15 @@ public class Board {
 	public Suggestion getSolution() {
 		return solution;
 	}
+	
+	public void setSolution(Suggestion solution2) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public boolean makeAccusation(Suggestion falseName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
