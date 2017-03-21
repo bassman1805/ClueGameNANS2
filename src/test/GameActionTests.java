@@ -33,13 +33,16 @@ public class GameActionTests {
 		//Ensure that computer players select new spaces properly
 		
 		Player p = Board.getPlayer(1);
+		Set<BoardCell> options;
 		Set<BoardCell> targets = new HashSet<BoardCell>();
 		
-		//if no rooms in list, select randomly
+		//if no rooms in list, select randomly.
+		board.calcTargets(4, 6, 1); //from this point, if you only move 1 space, you only get to other walkways		
+		options = board.getTargets();		
 		for(int i=0; i < 100; i++){
-			p.setLocation(4,6); //from this point, if you only move 1 space, you only get to other walkways
-			p.selectTarget(1);
-			targets.add(p.getBoardCell()); //After 100 tries, we will probably have ended up at each option at least once
+			p.setLocation(4,6); 
+			p.selectTarget(options);
+			targets.add(board.getBoardCell(p)); //After 100 tries, we should have ended up at each option at least once
 		}
 		assertEquals(targets.size(), 4);
 		assertTrue(targets.contains(board.getCellAt(3,6)));
@@ -47,24 +50,28 @@ public class GameActionTests {
 		assertTrue(targets.contains(board.getCellAt(4,5)));
 		assertTrue(targets.contains(board.getCellAt(4,7)));
 		
+		targets.clear();
 		
 		//if room in list that was not just visited, must select it
+		board.calcTargets(4, 3, 1); //from this point, if you only move 1 space, you are in range of a room
+		options = board.getTargets();
 		for(int i=0; i < 100; i++){
 			p.setLocation(4,3); //from this point, if you only move 1 space, you are in range of a room
 			p.setLastRoom('*'); //no rooms have this char, so this will let the player enter any room
-			p.selectTarget(1);
-			targets.add(p.getBoardCell());
+			p.selectTarget(options);
+			targets.add(board.getBoardCell(p));
 		}
 		assertEquals(targets.size(), 1); //should get the same result every time
 		assertTrue(targets.contains(board.getCellAt(3,3)));
 		
+		targets.clear();
 		
 		//if room just visited is in list, each target (including room) selected randomly
 		for(int i=0; i < 100; i++){
-			p.setLocation(4,3); //from this point, if you only move 1 space, you are in range of a room
+			p.setLocation(4,3); //same place as last test
 			p.setLastRoom('D'); //make sure this is the last visited room
-			p.selectTarget(1);
-			targets.add(p.getBoardCell());
+			p.selectTarget(options);
+			targets.add(board.getBoardCell(p));
 		}
 		assertEquals(targets.size(), 4); //should have 4 results
 		assertTrue(targets.contains(board.getCellAt(5,3)));

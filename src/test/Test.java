@@ -26,7 +26,7 @@ public class Test {
 		// set the file names to use my config files
 		board.setConfigFiles("ClueLayout_MRFS.csv", "Legend_MRFS.txt");		
 		// Initialize will load BOTH config files 
-		board.initialize();
+		board.initialize1();
 	}
 
 	@org.junit.Test

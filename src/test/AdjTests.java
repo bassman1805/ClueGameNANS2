@@ -20,7 +20,7 @@ public class AdjTests {
 		board = Board.getInstance();
 		// set the file names to use my config files
 		board.setConfigFiles("ClueLayout_MRFS.csv", "Legend_MRFS.txt");		
-		board.initialize();
+		board.initialize1();
 	}
 
 	@Test

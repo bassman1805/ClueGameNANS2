@@ -2,12 +2,14 @@ package clueGame;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Set;
 
-public class Player {
+public abstract class Player {
 	String name;
 	Color playerColor;
 	int row;
 	int column;
+	char lastRoom;
 	
 	ArrayList<Card> hand;
 	
@@ -17,6 +19,7 @@ public class Player {
 		this.row = row;
 		this.column = column;
 		hand = new ArrayList<Card>();
+		lastRoom = '*'; //no room has this char. It's essentially a "blank"
 	}
 	
 	public void emptyHand(){
@@ -39,36 +42,28 @@ public class Player {
 		return playerColor;
 	}
 
-	public Object getRow() {
+	public int getRow() {
 		return row;
 	}
 
-	public Object getCol() {
+	public int getCol() {
 		return column;
 	}
 
-	public Object getName() {
+	public string getName() {
 		return name;
 	}
 
 	public void setLocation(int i, int j) {
-		// TODO Auto-generated method stub
-		
+		this.row = i;
+		this.column = j;
 	}
 
-	public void selectTarget(int i) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public BoardCell getBoardCell() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public abstract void selectTarget(Set<BoardCell> options);
+	
 	public void setLastRoom(char c) {
-		// TODO Auto-generated method stub
-		
+		this.lastRoom = c;
 	}
+	
 
 }

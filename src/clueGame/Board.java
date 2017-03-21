@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.Set;
 import java.util.Stack;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -32,7 +33,7 @@ public class Board {
 	private String weaponConfigFile;
 	private String personConfigFile;
 	
-	private ArrayList<Player> players;
+	private static ArrayList<Player> players;
 	
 	private ArrayList<String> playerCards;
 	private ArrayList<String> weaponCards;
@@ -100,6 +101,13 @@ public class Board {
 	}
 
 	/////////////////// HELPER FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\
+	public void initialize1(){
+		//this exists purely because we have some tests that do not initialize the person or weapon decks
+		loadRoomConfig();
+		loadBoardConfig();
+		calcAdjacencies();
+	}
+	
 	public void initialize() 
 	{
 		loadRoomConfig();
@@ -239,7 +247,7 @@ public class Board {
 				column = Integer.parseInt(splitLine[3]);
 
 				playerCards.add(name);
-				p = new Player(name, color, row, column);
+				p = new ComputerPlayer(name, color, row, column);
 				players.add(p);
 			}
 
@@ -448,7 +456,6 @@ public class Board {
 
 	public void calcTargets(int row, int col, int pathLength)
 	{
-		
 		visitedTargets = new HashSet<BoardCell>();
 		targets = new HashSet<BoardCell>();
 		visitedTargets.add(board[row][col]);
@@ -524,9 +531,13 @@ public class Board {
 			return true;
 		return false;
 	}
+	
 	public static Player getPlayer(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		return players.get(i);
+	}
+	
+	public BoardCell getBoardCell(Player p) {
+		return board[p.getRow()][p.getCol()];
 	}
 
 }

@@ -2,6 +2,11 @@ package clueGame;
 
 public class BoardCell {
 	
+	@Override
+	public String toString() {
+		return "BoardCell [row=" + row + ", col=" + col + ", initial=" + initial + "]";
+	}
+
 	private int row = 0;
 	private int col = 0;
 	private boolean isDoorway;
