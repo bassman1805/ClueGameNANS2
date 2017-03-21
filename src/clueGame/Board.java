@@ -39,7 +39,7 @@ public class Board {
 	private ArrayList<String> roomCards;
 	private Stack<Card> deck;
 	
-	private Solution solution;
+	private Suggestion solution;
 
 
 	/////////////////// CONSTRUCTOR \\\\\\\\\\\\\\\\\\\\\\\
@@ -410,7 +410,7 @@ public class Board {
 		tempWeapon = weaponDeck.get(i);
 		weaponDeck.remove(i);
 		
-		solution = new Solution(tempPerson, tempRoom, tempWeapon);
+		solution = new Suggestion(tempPerson, tempRoom, tempWeapon);
 		
 		//combine mini-decks into big deck
 		for(Card card : roomDeck){
@@ -511,7 +511,7 @@ public class Board {
 		return roomCards;
 	}
 	
-	public Solution getSolution() {
+	public Suggestion getSolution() {
 		return solution;
 	}
 

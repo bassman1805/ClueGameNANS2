@@ -1,14 +1,8 @@
 package experiment;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.sun.javafx.collections.MappingChange;
-import com.sun.javafx.collections.MappingChange.Map;
-
-import test.IntBoardTest;
 
 public class IntBoard {
 	
