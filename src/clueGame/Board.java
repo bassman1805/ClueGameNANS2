@@ -524,5 +524,9 @@ public class Board {
 			return true;
 		return false;
 	}
+	public static Player getPlayer(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

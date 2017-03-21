@@ -51,4 +51,24 @@ public class Player {
 		return name;
 	}
 
+	public void setLocation(int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void selectTarget(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public BoardCell getBoardCell() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setLastRoom(char c) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
