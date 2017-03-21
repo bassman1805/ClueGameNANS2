@@ -515,13 +515,13 @@ public class Board {
 		return solution;
 	}
 	
-	public void setSolution(Suggestion solution2) {
-		// TODO Auto-generated method stub
-		
+	public void setSolution(Suggestion solution){
+		this.solution = solution;
 	}
 	
-	public boolean makeAccusation(Suggestion falseName) {
-		// TODO Auto-generated method stub
+	public boolean makeAccusation(Suggestion suggestion){
+		if (suggestion.getPerson() == solution.getPerson() && suggestion.getRoom() == solution.getRoom() && suggestion.getWeapon() == solution.getWeapon())
+			return true;
 		return false;
 	}
 
