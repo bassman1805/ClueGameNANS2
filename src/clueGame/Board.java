@@ -521,6 +521,8 @@ public class Board {
 			return true;
 		return false;
 	}
+	
+	
 	public void clearAllHands() {
 		for(Player p : players){
 			p.emptyHand();
@@ -582,6 +584,11 @@ public class Board {
 		p.addCard(roomDeck.get(6));
 		p.addCard(roomDeck.get(7));
 		p.addCard(roomDeck.get(8));
+	}
+	
+	public Card handleSuggestion(Player guesser, Suggestion guess) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

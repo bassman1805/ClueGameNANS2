@@ -81,18 +81,9 @@ public abstract class Player {
 		for (Card c : hand){
 			d = suggestion.getPerson();
 			
-			if (c.equals(suggestion.getPerson())){
-				contain.add(c);
-				System.out.println("matt damon");
-			}
-			if (c.equals(suggestion.getRoom())){
-				contain.add(c);
-				System.out.println("bitch");
-			}
-			if (c.equals(suggestion.getWeapon())){
-				contain.add(c);
-				System.out.println("weapon");
-			}
+			if (c.equals(suggestion.getPerson())) contain.add(c);
+			if (c.equals(suggestion.getRoom())) contain.add(c);
+			if (c.equals(suggestion.getWeapon())) contain.add(c);
 		}
 		
 

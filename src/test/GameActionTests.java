@@ -129,9 +129,6 @@ public class GameActionTests {
 
 		Set<Card> results = new HashSet<Card>();
 		ArrayList<Card> resultArray = new ArrayList<Card>();
-		
-		//System.out.println(p1.getCards());
-		//System.out.println(p2.getCards());
 
 		//Testing hand that has no cards relating to suggestion
 		for(int i = 0; i < 100; i++){
@@ -161,7 +158,7 @@ public class GameActionTests {
 			resultArray.add(c);
 		}
 		assertEquals(resultArray.size(), 2);
-		// need to test for alternate cases
+		// need to test for alternate cases (weapon/room vs room/weapon)
 		boolean opt1 = resultArray.get(0).equals(weaponTwo);
 		opt1 = opt1 && resultArray.get(1).equals(locationTwo);
 		
@@ -174,8 +171,74 @@ public class GameActionTests {
 	
 	@Test
 	public void testSuggestionsBoard() {
-		//Make sure that all players disprove suggestions properly
-		//revealing only when they must, going through players in the proper order, etc.
-		fail("Not yet implemented");
+		board.dealStackedDeck();
+		
+		Suggestion guess;
+		ArrayList<Card> cards = new ArrayList<Card>();
+		Set<Card> results = new HashSet<Card>();
+		
+		Player p0 = board.getPlayer(0);
+		Player p1 = board.getPlayer(1);
+		Player p2 = board.getPlayer(2);
+		
+		guess = board.getSolution(); //nobody can disprove the solution
+		for(int i=0; i < 100; i++){
+			results.add(board.handleSuggestion(p0, guess));
+		}
+		assertEquals(1, results);
+		assertTrue(results.contains(null));
+		
+		//Make a suggestion entirely out of p1's cards, only they can disprove it.
+		cards = p1.getCards();
+		guess = new Suggestion(cards.get(0), cards.get(1), cards.get(2));
+		for(int i=0; i < 100; i++){
+			results.add(board.handleSuggestion(p1, guess));
+		}
+		assertEquals(1, results);
+		assertTrue(results.contains(null));
+		
+		//make a suggestion entirely out of p0's cards
+		cards = p0.getCards();
+		guess = new Suggestion(cards.get(0), cards.get(1), cards.get(2));
+		for(int i=0; i < 100; i++){
+			results.add(board.handleSuggestion(p1, guess));
+		}
+		assertEquals(3, results);
+		assertTrue(results.contains(cards.get(0)));
+		assertTrue(results.contains(cards.get(1)));
+		assertTrue(results.contains(cards.get(2)));
+		
+		//same accusation, but now human is the accuser
+		for(int i=0; i < 100; i++){
+			results.add(board.handleSuggestion(p0, guess));
+		}
+		assertEquals(1, results);
+		assertTrue(results.contains(null));
+		
+		//make a suggestion containing 2 different players' cards
+		cards.clear();
+		cards.addAll(p1.getCards());
+		cards.addAll(p2.getCards());
+		guess = new Suggestion(cards.get(0), cards.get(1), cards.get(5));
+		for(int i=0; i < 100; i++){
+			results.add(board.handleSuggestion(p0, guess));
+		}
+		assertEquals(3, results);
+		assertTrue(results.contains(cards.get(0)));
+		assertTrue(results.contains(cards.get(1)));
+		assertTrue(results.contains(cards.get(5)));
+		
+		//make suggestion one human and one computer can disprove, but computer should come first
+		cards.clear();
+		cards.addAll(p1.getCards());
+		cards.addAll(p0.getCards());
+		guess = new Suggestion(cards.get(0), cards.get(1), cards.get(5));
+		for(int i=0; i < 100; i++){
+			results.add(board.handleSuggestion(p0, guess));
+		}
+		assertEquals(3, results);
+		assertTrue(results.contains(cards.get(0)));
+		assertTrue(results.contains(cards.get(1)));
+		assertTrue(results.contains(cards.get(5)));
 	}
 }
