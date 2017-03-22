@@ -114,8 +114,47 @@ public class GameActionTests {
 	
 	@Test
 	public void testSuggestionDisprovePlayer() {
-		//Make sure suggestions are disproved properly by individual CPU players
-		fail("Not yet implemented");
+		Player p0 = board.getPlayer(0);
+		Player p1 = board.getPlayer(1);
+		Player p2 = board.getPlayer(2);
+		board.clearAllHands();
+		board.dealStackedDeck();
+
+		//card from player 1's hand
+		Card playerOne = new Card("Lydia", cardType.PERSON);
+		
+		//cards form player 2's hand
+		Card locationTwo = new Card("Alik'r", cardType.ROOM);
+		Card weaponTwo = new Card("Mehrune's Razor", cardType.WEAPON);
+
+		//p0 has none of these cards, p1 has one, and p2 has two
+		Suggestion guess = new Suggestion(playerOne, locationTwo, weaponTwo);
+
+		Set<Card> results = new HashSet<Card>();
+
+		//Testing hand that has no cards relating to suggestion
+		for(int i = 0; i < 100; i++){
+			results.add(p0.disproveSuggestion(guess));
+		}
+		assertEquals(results.size(), 1);
+		assertTrue(results.contains(null));
+		results.clear();
+
+		//Testing hand that has only one card within suggestion
+		for(int i = 0; i < 100; i++){
+			results.add(p1.disproveSuggestion(guess));
+		}
+		assertEquals(results.size(), 1);
+		assertTrue(results.contains(playerOne));
+		results.clear();
+
+		//Testing hand that has more than one card in suggestion
+		for(int i = 0; i < 100; i++){
+			results.add(p2.disproveSuggestion(guess));
+		}
+		assertEquals(results.size(), 2);
+		assertTrue(results.contains(locationTwo));
+		assertTrue(results.contains(weaponTwo));
 	}
 	
 	@Test
@@ -124,5 +163,4 @@ public class GameActionTests {
 		//revealing only when they must, going through players in the proper order, etc.
 		fail("Not yet implemented");
 	}
-
 }

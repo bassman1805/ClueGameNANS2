@@ -50,7 +50,7 @@ public abstract class Player {
 		return column;
 	}
 
-	public string getName() {
+	public String getName() {
 		return name;
 	}
 
@@ -63,6 +63,11 @@ public abstract class Player {
 	
 	public void setLastRoom(char c) {
 		this.lastRoom = c;
+	}
+
+	public Card disproveSuggestion(Suggestion guess) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

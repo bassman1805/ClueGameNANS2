@@ -1,6 +1,6 @@
 package clueGame;
 
-public class Suggestion {
+public class Suggestion{
 	Card person;
 	Card room;
 	Card weapon;

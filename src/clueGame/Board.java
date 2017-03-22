@@ -60,44 +60,74 @@ public class Board {
 	}
 
 	/////////////////// SETTERS \\\\\\\\\\\\\\\\\\\\\\\
-	public void setConfigFiles(String boardConfigFile, String legendFile)
-	{
+	public void setConfigFiles(String boardConfigFile, String legendFile){
 		this.boardConfigFile = boardConfigFile;
 		this.roomConfigFile = legendFile;
 	}
 	
-	public void setConfigFiles(String boardConfigFile, String legendFile, String weaponFile, String personFile)
-	{
+	public void setConfigFiles(String boardConfigFile, String legendFile, String weaponFile, String personFile){
 		this.boardConfigFile = boardConfigFile;
 		this.roomConfigFile = legendFile;
 		this.weaponConfigFile = weaponFile;
 		this.personConfigFile = personFile;
 	}
+	
+	public void setSolution(Suggestion solution){
+		this.solution = solution;
+	}
 
 	/////////////////// GETTERS \\\\\\\\\\\\\\\\\\\\\\\
-	public HashMap<Character, String> getLegend()
-	{
+	public HashMap<Character, String> getLegend(){
 		return this.legend;
 	}
 
-	public int getNumRows()
-	{
+	public int getNumRows(){
 		return numRows;
 	}
 
-	public int getNumColumns()
-	{
+	public int getNumColumns(){
 		return numColumns;
 	}
 
-	public BoardCell getCellAt(int row, int col)
-	{
+	public BoardCell getCellAt(int row, int col){
 		return board[row][col];
 	}
 
-	public Set<BoardCell> getAdjList(int row, int col)
-	{
+	public Set<BoardCell> getAdjList(int row, int col){
 		return adjMatrix.get(board[row][col]);
+	}
+	
+	public Set<BoardCell> getTargets(){
+		return targets;
+	}
+	
+	public ArrayList<Player> getPlayers(){
+		return players;
+	}
+	
+	public ArrayList<String> getPlayerCards() {
+		return playerCards;
+	}
+	
+	public ArrayList<String> getWeaponCards() {
+		return weaponCards;
+	}
+	
+	public ArrayList<String> getRoomCards() {
+		return roomCards;
+	}
+	
+	public Suggestion getSolution() {
+		return solution;
+	}
+	
+	public static Player getPlayer(int i) {
+		return players.get(i);
+	}
+	
+	public BoardCell getBoardCell(Player p) {
+		//get the BoardCell that Player p is standing on
+		return board[p.getRow()][p.getCol()];
 	}
 
 	/////////////////// HELPER FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\
@@ -108,8 +138,7 @@ public class Board {
 		calcAdjacencies();
 	}
 	
-	public void initialize() 
-	{
+	public void initialize() {
 		loadRoomConfig();
 		loadBoardConfig();
 		loadPersonConfig();
@@ -117,8 +146,7 @@ public class Board {
 		calcAdjacencies();
 	}
 	
-	public void loadRoomConfig()
-	{
+	public void loadRoomConfig(){
 		// Create the legend map
 		this.legend = new HashMap<Character, String>();
 
@@ -148,8 +176,7 @@ public class Board {
 		}
 	}
 
-	public void loadBoardConfig()
-	{
+	public void loadBoardConfig(){
 		try {
 			FileReader reader = new FileReader(boardConfigFile);
 			Scanner in = new Scanner(reader);
@@ -256,8 +283,7 @@ public class Board {
 		}
 	}
 
-	public void calcAdjacencies()
-	{
+	public void calcAdjacencies(){
 		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
 
 		for(int i = 0; i < numRows; i++)
@@ -374,7 +400,6 @@ public class Board {
 		}
 	}
 	
-	// this has been altered. look back over
 	public void dealCards() {
 		//make sure every player has an empty hand to start out with
 		//also empty the deck, if it has anything for some reason
@@ -448,14 +473,8 @@ public class Board {
 		}
 	}
 	
-	//for(Player p:players) p.emptyHand();
-	//ArrayList<Card> roomDeck;
-	//ArrayList<Card> personDeck;
-	//ArrayList<Card> weaponDeck;
-	
 
-	public void calcTargets(int row, int col, int pathLength)
-	{
+	public void calcTargets(int row, int col, int pathLength){
 		visitedTargets = new HashSet<BoardCell>();
 		targets = new HashSet<BoardCell>();
 		visitedTargets.add(board[row][col]);
@@ -496,48 +515,73 @@ public class Board {
 			}
 		}
 	}
-
-	public Set<BoardCell> getTargets()
-	{
-		return targets;
-	}
-	
-	public ArrayList<Player> getPlayers(){
-		return players;
-	}
-	
-	public ArrayList<String> getPlayerCards() {
-		return playerCards;
-	}
-	
-	public ArrayList<String> getWeaponCards() {
-		return weaponCards;
-	}
-	
-	public ArrayList<String> getRoomCards() {
-		return roomCards;
-	}
-	
-	public Suggestion getSolution() {
-		return solution;
-	}
-	
-	public void setSolution(Suggestion solution){
-		this.solution = solution;
-	}
 	
 	public boolean makeAccusation(Suggestion suggestion){
 		if (suggestion.getPerson() == solution.getPerson() && suggestion.getRoom() == solution.getRoom() && suggestion.getWeapon() == solution.getWeapon())
 			return true;
 		return false;
 	}
-	
-	public static Player getPlayer(int i) {
-		return players.get(i);
+	public void clearAllHands() {
+		for(Player p : players){
+			p.emptyHand();
+		}
 	}
-	
-	public BoardCell getBoardCell(Player p) {
-		return board[p.getRow()][p.getCol()];
+
+	public void dealStackedDeck(){
+		//for testing purposes only. Deals the same solution and hands every time.
+		
+		Card c;
+		ArrayList<Card> roomDeck = new ArrayList<Card>();
+		ArrayList<Card> personDeck = new ArrayList<Card>();
+		ArrayList<Card> weaponDeck = new ArrayList<Card>();
+		
+		//populate mini-decks
+		for (String s : roomCards){
+			c = new Card(s, cardType.ROOM);
+			roomDeck.add(c);
+		}
+		for (String s : playerCards){
+			c = new Card(s, cardType.PERSON);
+			personDeck.add(c);
+		}
+		for (String s : weaponCards){
+			c = new Card(s, cardType.WEAPON);
+			weaponDeck.add(c);
+		}
+		
+		solution = new Suggestion(personDeck.get(0), roomDeck.get(0), weaponDeck.get(0));
+		
+		Player p;
+		
+		p = players.get(0);
+		p.addCard(personDeck.get(1));
+		p.addCard(roomDeck.get(1));
+		p.addCard(weaponDeck.get(1));
+		
+		p = players.get(1);
+		p.addCard(personDeck.get(2));
+		p.addCard(roomDeck.get(2));
+		p.addCard(weaponDeck.get(2));		
+		
+		p = players.get(2);
+		p.addCard(personDeck.get(3));
+		p.addCard(roomDeck.get(3));
+		p.addCard(weaponDeck.get(3));
+		
+		p = players.get(3);
+		p.addCard(personDeck.get(4));
+		p.addCard(roomDeck.get(4));
+		p.addCard(weaponDeck.get(4));
+		
+		p = players.get(4);
+		p.addCard(personDeck.get(5));
+		p.addCard(roomDeck.get(5));
+		p.addCard(weaponDeck.get(5));
+		
+		p = players.get(5);
+		p.addCard(roomDeck.get(6));
+		p.addCard(roomDeck.get(7));
+		p.addCard(roomDeck.get(8));
 	}
 
 }
