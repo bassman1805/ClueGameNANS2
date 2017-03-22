@@ -111,11 +111,12 @@ public class GameActionTests {
 	@Test
 	public void testSuggestionsCreation() {
 		//the players and their dealt hands are initialized; player 0 only has one unseen card, player 2 has multiple
-		//unseen cards
+		//unseen card
 		Player p0 = board.getPlayer(0);
 		Player p1 = board.getPlayer(1);
 		board.clearAllHands();
 		board.dealStackedDeck();
+		ArrayList<Card> temp = new ArrayList<Card>();
 		
 		//First, for every player, they should start out by seeing everything; the actual cards that
 		//they see will be altered later
@@ -123,35 +124,38 @@ public class GameActionTests {
 		Card person1 = null;
 		Card person2 = null;
 		for (Card c : board.getPlayerCards()){
-			if (c.getName() != "J'zargo"){ 
-				person1 = new Card(c);
-				p0.seeCards(c);
-				p1.seeCards(c);
-			}
+			p0.seeCards(c);
+			p1.seeCards(c);
 
-			if (c.getName() != "Farkas"){
-				person2 = new Card(c);
-				p1.seeCards(c);
-			}
+			if (c.getName().equals("Farkas")) person1 = new Card(c);
+			else if(c.getName().equals("Lydia")) person2 = new Card(c);
 		}
+		temp.clear();
+		temp.add(person1);
+		p0.unseePeople(temp);
+		temp.add(person2);
+		p1.unseePeople(temp);
+		
 		
 		Card weapon1 = null;
 		Card weapon2 = null;
 		for (Card c : board.getWeaponCards()){
-			if (c.getName() != "Mehrune's Razor") {
-				weapon1 = new Card(c);
-				p0.seeCards(c);
-				p1.seeCards(c);
-			}
-			if (c.getName() != "Sanguine Rose"){
-				weapon2 = new Card(c);
-				p1.seeCards(c);
-			}
+			p0.seeCards(c);
+			p1.seeCards(c);
+			
+			if(c.getName().equals("Mehrune's Razor")) weapon1 = new Card(c);
+			else if(c.getName().equals("Sanguine Rose")) weapon2 = new Card(c);
 		}
 		
-		Card room = board.getRoomCards().get(0);
-		Suggestion guess;
+		temp.clear();
+		temp.add(weapon1);
+		p0.unseeWeapons(temp);
+		temp.add(weapon2);
+		p1.unseeWeapons(temp);
 		
+		Card room = board.getRoomCards().get(0);
+		
+		Suggestion guess;
 		guess = p0.suggest(room);
 		
 		assertTrue(guess.getWeapon().equals(weapon1));
@@ -269,7 +273,6 @@ public class GameActionTests {
 		
 		//same accusation, but now human is the accuser
 		results.clear();
-		System.out.println("WONKY");
 		for(int i=0; i < 100; i++){
 			results.add(board.handleSuggestion(p0, guess));
 		}
@@ -294,7 +297,6 @@ public class GameActionTests {
 		cards.addAll(p2.getCards());
 		cards.addAll(p0.getCards());
 		guess = new Suggestion(cards.get(0), cards.get(1), cards.get(5));results.clear();
-		System.out.println("");
 		for(int i=0; i < 100; i++){
 			results.add(board.handleSuggestion(p1, guess));
 		}

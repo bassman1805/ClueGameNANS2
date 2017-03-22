@@ -7,14 +7,13 @@ import java.util.Random;
 import java.util.Set;
 
 public class ComputerPlayer extends Player{
-	
-	ArrayList<Card> unseenRooms;
-	ArrayList<Card> unseenWeapons;
-	ArrayList<Card> unseenPeople;
 
 	public ComputerPlayer(String name, Color playerColor, int row, int column) {
 		super(name, playerColor, row, column);
-		// TODO Auto-generated constructor stub
+		
+		unseenRooms = new ArrayList<Card>();
+		unseenWeapons = new ArrayList<Card>();
+		unseenPeople = new ArrayList<Card>();
 	}
 	
 	private BoardCell choose(Set<BoardCell> options){
@@ -62,10 +61,28 @@ public class ComputerPlayer extends Player{
 
 	@Override
 	public Suggestion suggest(Card room) {
-		// TODO Auto-generated method stub
-		return null;
+		Random rand = new Random();
+		int x, z;
+		x = rand.nextInt(unseenPeople.size());
+		z = rand.nextInt(unseenWeapons.size());
+		return new Suggestion(unseenPeople.get(x), room, unseenWeapons.get(z));
 	}
-	
-	
+
+	@Override
+	public void seeCards(Card retval) {
+		if (retval.getType() == cardType.PERSON){
+			unseenPeople.remove(retval);
+		}
+
+		if (retval.getType() == cardType.ROOM){
+			unseenRooms.remove(retval);
+		}
+
+		if (retval.getType() == cardType.WEAPON){
+			unseenWeapons.remove(retval);
+		}
+	}
+
+
 
 }

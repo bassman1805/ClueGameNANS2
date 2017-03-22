@@ -12,6 +12,10 @@ public abstract class Player {
 	int column;
 	char lastRoom;
 	
+	ArrayList<Card> unseenRooms;
+	public ArrayList<Card> unseenWeapons;
+	ArrayList<Card> unseenPeople;
+	
 	ArrayList<Card> hand;
 	
 	public Player(String name, Color playerColor, int row, int column){
@@ -83,11 +87,12 @@ public abstract class Player {
 			return contain.get(num);
 		}
 	}
+	
+	public abstract void unseeWeapons(ArrayList weapons);
+	public abstract void unseePeople(ArrayList people);
+	public abstract void unseeRooms(ArrayList rooms);
 
-	public void seeCards(Card retval) {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract void seeCards(Card retval);
 
 	public abstract Suggestion suggest(Card room);
 }

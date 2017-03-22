@@ -425,7 +425,13 @@ public class Board {
 	public void dealCards() {
 		//make sure every player has an empty hand to start out with
 		//also empty the deck, if it has anything for some reason
-		for(Player p:players) p.emptyHand();
+		
+		for(Player p:players){
+			p.emptyHand();
+			p.unseePeople(playerCards);
+			p.unseeRooms(roomCards);
+			p.unseeWeapons(weaponCards);
+		}
 		deck.clear();
 		
 		//declare cards and decks
@@ -553,6 +559,12 @@ public class Board {
 
 	public void dealStackedDeck(){
 		//for testing purposes only. Deals the same solution and hands every time.
+		for(Player p:players){
+			p.emptyHand();
+			p.unseePeople(playerCards);
+			p.unseeRooms(roomCards);
+			p.unseeWeapons(weaponCards);
+		}
 		
 		Card c;
 		ArrayList<Card> roomDeck = new ArrayList<Card>();
