@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -120,22 +121,22 @@ public class GameActionTests {
 		board.clearAllHands();
 		board.dealStackedDeck();
 
-		//card from player 1's hand
 		Card playerOne = new Card("Lydia", cardType.PERSON);
-		
-		//cards form player 2's hand
 		Card locationTwo = new Card("Alik'r", cardType.ROOM);
 		Card weaponTwo = new Card("Mehrune's Razor", cardType.WEAPON);
 
-		//p0 has none of these cards, p1 has one, and p2 has two
 		Suggestion guess = new Suggestion(playerOne, locationTwo, weaponTwo);
 
 		Set<Card> results = new HashSet<Card>();
+		ArrayList<Card> resultArray = new ArrayList<Card>();
+		
+		//System.out.println(p1.getCards());
+		//System.out.println(p2.getCards());
 
 		//Testing hand that has no cards relating to suggestion
 		for(int i = 0; i < 100; i++){
 			results.add(p0.disproveSuggestion(guess));
-		}                         
+		}
 		assertEquals(results.size(), 1);
 		assertTrue(results.contains(null));
 		results.clear();
@@ -144,17 +145,31 @@ public class GameActionTests {
 		for(int i = 0; i < 100; i++){
 			results.add(p1.disproveSuggestion(guess));
 		}
-		assertEquals(results.size(), 1);
-		assertTrue(results.contains(playerOne));
+		for (Card c : results){
+			resultArray.add(c);
+		}
+		assertEquals(resultArray.size(), 1);
+		assertTrue(resultArray.get(0).equals(playerOne));
 		results.clear();
+		resultArray.clear();
 
 		//Testing hand that has more than one card in suggestion
 		for(int i = 0; i < 100; i++){
 			results.add(p2.disproveSuggestion(guess));
 		}
-		assertEquals(results.size(), 2);
-		assertTrue(results.contains(locationTwo));
-		assertTrue(results.contains(weaponTwo));
+		for (Card c : results){
+			resultArray.add(c);
+		}
+		assertEquals(resultArray.size(), 2);
+		// need to test for alternate cases
+		boolean opt1 = resultArray.get(0).equals(weaponTwo);
+		opt1 = opt1 && resultArray.get(1).equals(locationTwo);
+		
+		boolean opt2 = resultArray.get(0).equals(locationTwo);
+		opt2 = resultArray.get(1).equals(weaponTwo);
+		
+		assertTrue(opt1 || opt2);
+		
 	}
 	
 	@Test

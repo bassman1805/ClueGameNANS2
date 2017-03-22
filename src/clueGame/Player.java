@@ -2,6 +2,7 @@ package clueGame;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Set;
 
 public abstract class Player {
@@ -65,8 +66,41 @@ public abstract class Player {
 		this.lastRoom = c;
 	}
 
-	public Card disproveSuggestion(Suggestion guess) {
-		// TODO Auto-generated method stub
+	public Card disproveSuggestion(Suggestion suggestion){
+		Random rand = new Random();
+		ArrayList<Card> contain = new ArrayList<Card>();
+		
+		//System.out.println(suggestion);
+		//System.out.println(hand);
+		//System.out.println();
+		
+		String s1;
+		String s2;
+		Card d;
+		
+		for (Card c : hand){
+			d = suggestion.getPerson();
+			
+			if (c.equals(suggestion.getPerson())){
+				contain.add(c);
+				System.out.println("matt damon");
+			}
+			if (c.equals(suggestion.getRoom())){
+				contain.add(c);
+				System.out.println("bitch");
+			}
+			if (c.equals(suggestion.getWeapon())){
+				contain.add(c);
+				System.out.println("weapon");
+			}
+		}
+		
+
+		if (contain.size() > 0){
+			int num = rand.nextInt(contain.size());
+			return contain.get(num);
+		}
+
 		return null;
 	}
 	
