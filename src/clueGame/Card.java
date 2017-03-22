@@ -8,6 +8,11 @@ public class Card{
 		this.name = name;
 		this.type = type;
 	}
+	
+	public Card(Card orig){
+		this.name = orig.name;
+		this.type = orig.type;
+	}
 
 	public String getName() {
 		return name;

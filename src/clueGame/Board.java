@@ -36,8 +36,12 @@ public class Board {
 	private static ArrayList<Player> players;
 	
 	private ArrayList<String> playerNames;
-	private ArrayList<String> weaponCards;
-	private ArrayList<String> roomCards;
+	private ArrayList<String> weaponNames;
+	private ArrayList<String> roomNames;
+	
+	private ArrayList<Card> playerCards;
+	private ArrayList<Card> weaponCards;
+	private ArrayList<Card> roomCards;
 	private Stack<Card> deck;
 	
 	private Suggestion solution;
@@ -49,10 +53,14 @@ public class Board {
 	// ctor is private to ensure only one can be created
 	private Board() {
 		playerNames = new ArrayList<String>();
-		weaponCards = new ArrayList<String>();
-		roomCards = new ArrayList<String>();
+		weaponNames = new ArrayList<String>();
+		roomNames = new ArrayList<String>();
 		players = new ArrayList<Player>();
 		deck = new Stack<Card>();
+		
+		playerCards = new ArrayList<Card>();
+		weaponCards = new ArrayList<Card>();
+		roomCards = new ArrayList<Card>();
 	}
 	// this method returns the only Board
 	public static Board getInstance() {
@@ -105,15 +113,27 @@ public class Board {
 		return players;
 	}
 	
-	public ArrayList<String> getPlayerCards() {
+	public ArrayList<String> getPlayerNames() {
 		return playerNames;
 	}
 	
-	public ArrayList<String> getWeaponCards() {
+	public ArrayList<String> getWeaponNames() {
+		return weaponNames;
+	}
+	
+	public ArrayList<String> getRoomNames() {
+		return roomNames;
+	}
+	
+	public ArrayList<Card> getPlayerCards() {
+		return playerCards;
+	}
+	
+	public ArrayList<Card> getWeaponCards() {
 		return weaponCards;
 	}
 	
-	public ArrayList<String> getRoomCards() {
+	public ArrayList<Card> getRoomCards() {
 		return roomCards;
 	}
 	
@@ -167,7 +187,8 @@ public class Board {
 				
 				legend.put(initial, name);
 				if (type.equalsIgnoreCase("card")){
-					roomCards.add(name);
+					roomNames.add(name);
+					roomCards.add(new Card(name, cardType.ROOM));
 				}
 			}
 
@@ -228,7 +249,8 @@ public class Board {
 			while(in.hasNextLine())
 			{
 				String line = in.nextLine();
-				weaponCards.add(line);
+				weaponNames.add(line);
+				weaponCards.add(new Card(line, cardType.WEAPON));
 			}
 
 		} catch (FileNotFoundException e) {
@@ -273,6 +295,7 @@ public class Board {
 				column = Integer.parseInt(splitLine[3]);
 
 				playerNames.add(name);
+				playerCards.add(new Card(name, cardType.PERSON));
 				p = new ComputerPlayer(name, color, row, column);
 				players.add(p);
 			}
@@ -412,7 +435,7 @@ public class Board {
 		ArrayList<Card> weaponDeck = new ArrayList<Card>();
 		
 		//populate mini-decks
-		for (String s : roomCards){
+		for (String s : roomNames){
 			c = new Card(s, cardType.ROOM);
 			roomDeck.add(c);
 		}
@@ -420,7 +443,7 @@ public class Board {
 			c = new Card(s, cardType.PERSON);
 			personDeck.add(c);
 		}
-		for (String s : weaponCards){
+		for (String s : weaponNames){
 			c = new Card(s, cardType.WEAPON);
 			weaponDeck.add(c);
 		}
@@ -537,7 +560,7 @@ public class Board {
 		ArrayList<Card> weaponDeck = new ArrayList<Card>();
 		
 		//populate mini-decks
-		for (String s : roomCards){
+		for (String s : roomNames){
 			c = new Card(s, cardType.ROOM);
 			roomDeck.add(c);
 		}
@@ -545,7 +568,7 @@ public class Board {
 			c = new Card(s, cardType.PERSON);
 			personDeck.add(c);
 		}
-		for (String s : weaponCards){
+		for (String s : weaponNames){
 			c = new Card(s, cardType.WEAPON);
 			weaponDeck.add(c);
 		}

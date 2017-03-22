@@ -88,4 +88,6 @@ public abstract class Player {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public abstract Suggestion suggest(Card room);
 }

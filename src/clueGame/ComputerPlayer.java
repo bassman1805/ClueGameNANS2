@@ -1,11 +1,16 @@
 package clueGame;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
 public class ComputerPlayer extends Player{
+	
+	ArrayList<Card> unseenRooms;
+	ArrayList<Card> unseenWeapons;
+	ArrayList<Card> unseenPeople;
 
 	public ComputerPlayer(String name, Color playerColor, int row, int column) {
 		super(name, playerColor, row, column);
@@ -35,12 +40,30 @@ public class ComputerPlayer extends Player{
 		
 		return null;
 	}
+	
+	public void unseeRooms(ArrayList rooms){
+		unseenRooms.addAll(rooms);
+	}
+	
+	public void unseePeople(ArrayList people){
+		unseenPeople.addAll(people);
+	}
+	
+	public void unseeWeapons(ArrayList weapons){
+		unseenWeapons.addAll(weapons);
+	}
 
 	@Override
 	public void selectTarget(Set<BoardCell> options) {
 		BoardCell target = this.choose(options);
 		
 		this.setLocation(target.getRow(), target.getCol());		
+	}
+
+	@Override
+	public Suggestion suggest(Card room) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

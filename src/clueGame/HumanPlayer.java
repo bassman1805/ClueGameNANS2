@@ -16,4 +16,10 @@ public class HumanPlayer extends Player{
 		
 	}
 
+	@Override
+	public Suggestion suggest(Card room) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

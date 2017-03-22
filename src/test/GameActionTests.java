@@ -110,8 +110,62 @@ public class GameActionTests {
 	
 	@Test
 	public void testSuggestionsCreation() {
-		//make sure CPU players make proper suggestions
-		fail("Not yet implemented");
+		//the players and their dealt hands are initialized; player 0 only has one unseen card, player 2 has multiple
+		//unseen cards
+		Player p0 = board.getPlayer(0);
+		Player p1 = board.getPlayer(1);
+		board.clearAllHands();
+		board.dealStackedDeck();
+		
+		//First, for every player, they should start out by seeing everything; the actual cards that
+		//they see will be altered later
+		
+		Card person1 = null;
+		Card person2 = null;
+		for (Card c : board.getPlayerCards()){
+			if (c.getName() != "J'zargo"){ 
+				person1 = new Card(c);
+				p0.seeCards(c);
+				p1.seeCards(c);
+			}
+
+			if (c.getName() != "Farkas"){
+				person2 = new Card(c);
+				p1.seeCards(c);
+			}
+		}
+		
+		Card weapon1 = null;
+		Card weapon2 = null;
+		for (Card c : board.getWeaponCards()){
+			if (c.getName() != "Mehrune's Razor") {
+				weapon1 = new Card(c);
+				p0.seeCards(c);
+				p1.seeCards(c);
+			}
+			if (c.getName() != "Sanguine Rose"){
+				weapon2 = new Card(c);
+				p1.seeCards(c);
+			}
+		}
+		
+		Card room = board.getRoomCards().get(0);
+		Suggestion guess;
+		
+		guess = p0.suggest(room);
+		
+		assertTrue(guess.getWeapon().equals(weapon1));
+		assertTrue(guess.getPerson().equals(person1));
+		assertTrue(guess.getRoom().equals(room));
+		
+		Set<Card> store = new HashSet<Card>();
+		for (int i = 0; i < 100; i++){
+			guess = p1.suggest(room);
+			store.add(guess.getPerson());
+			store.add(guess.getWeapon());
+			store.add(guess.getRoom());
+		}
+		assertEquals(store.size(), 5);
 	}
 	
 	@Test
