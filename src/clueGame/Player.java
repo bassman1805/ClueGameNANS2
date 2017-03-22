@@ -70,30 +70,22 @@ public abstract class Player {
 		Random rand = new Random();
 		ArrayList<Card> contain = new ArrayList<Card>();
 		
-		//System.out.println(suggestion);
-		//System.out.println(hand);
-		//System.out.println();
-		
-		String s1;
-		String s2;
-		Card d;
-		
 		for (Card c : hand){
-			d = suggestion.getPerson();
-			
-			if (c.equals(suggestion.getPerson())) contain.add(c);
-			if (c.equals(suggestion.getRoom())) contain.add(c);
-			if (c.equals(suggestion.getWeapon())) contain.add(c);
+			if (c.equals(suggestion.getPerson()))	contain.add(c);
+			if (c.equals(suggestion.getRoom()))		contain.add(c);
+			if (c.equals(suggestion.getWeapon()))	contain.add(c);
 		}
 		
-
-		if (contain.size() > 0){
+		if(contain.size() == 0){
+			return null;
+		}else{
 			int num = rand.nextInt(contain.size());
 			return contain.get(num);
 		}
-
-		return null;
 	}
-	
 
+	public void seeCards(Card retval) {
+		// TODO Auto-generated method stub
+		
+	}
 }

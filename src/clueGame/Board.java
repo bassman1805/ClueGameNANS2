@@ -35,7 +35,7 @@ public class Board {
 	
 	private static ArrayList<Player> players;
 	
-	private ArrayList<String> playerCards;
+	private ArrayList<String> playerNames;
 	private ArrayList<String> weaponCards;
 	private ArrayList<String> roomCards;
 	private Stack<Card> deck;
@@ -48,7 +48,7 @@ public class Board {
 	private static Board theInstance = new Board();
 	// ctor is private to ensure only one can be created
 	private Board() {
-		playerCards = new ArrayList<String>();
+		playerNames = new ArrayList<String>();
 		weaponCards = new ArrayList<String>();
 		roomCards = new ArrayList<String>();
 		players = new ArrayList<Player>();
@@ -106,7 +106,7 @@ public class Board {
 	}
 	
 	public ArrayList<String> getPlayerCards() {
-		return playerCards;
+		return playerNames;
 	}
 	
 	public ArrayList<String> getWeaponCards() {
@@ -121,7 +121,7 @@ public class Board {
 		return solution;
 	}
 	
-	public static Player getPlayer(int i) {
+	public Player getPlayer(int i) {
 		return players.get(i);
 	}
 	
@@ -249,7 +249,6 @@ public class Board {
 	    return color;
 	}
 
-	
 	public void loadPersonConfig(){
 		try {
 			FileReader reader = new FileReader(personConfigFile);
@@ -273,7 +272,7 @@ public class Board {
 				row = Integer.parseInt(splitLine[2]);
 				column = Integer.parseInt(splitLine[3]);
 
-				playerCards.add(name);
+				playerNames.add(name);
 				p = new ComputerPlayer(name, color, row, column);
 				players.add(p);
 			}
@@ -417,7 +416,7 @@ public class Board {
 			c = new Card(s, cardType.ROOM);
 			roomDeck.add(c);
 		}
-		for (String s : playerCards){
+		for (String s : playerNames){
 			c = new Card(s, cardType.PERSON);
 			personDeck.add(c);
 		}
@@ -542,7 +541,7 @@ public class Board {
 			c = new Card(s, cardType.ROOM);
 			roomDeck.add(c);
 		}
-		for (String s : playerCards){
+		for (String s : playerNames){
 			c = new Card(s, cardType.PERSON);
 			personDeck.add(c);
 		}
@@ -587,8 +586,31 @@ public class Board {
 	}
 	
 	public Card handleSuggestion(Player guesser, Suggestion guess) {
-		// TODO Auto-generated method stub
-		return null;
+		Card retval = null;
+		int i = players.lastIndexOf(guesser)+1;
+		if(i > players.size()-1){
+			i = 0;
+		}
+		
+		//keep asking until we get to the guesser again
+		while(players.get(i) != guesser){
+			//ask player "i"
+			retval = players.get(i).disproveSuggestion(guess);
+			//System.out.println("Player " + i);
+			
+			//if they had a card, return that
+			if(retval != null){
+				guesser.seeCards(retval);
+				//System.out.println(retval);
+				return retval;
+			}
+			
+			i++;
+			if(i > players.size()-1){
+				i = 0;
+			}
+		}
+		return retval;
 	}
 
 }

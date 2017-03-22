@@ -1,6 +1,6 @@
 package clueGame;
 
-public class Card {
+public class Card{
 	private String name;
 	private cardType type;
 	
@@ -33,5 +33,10 @@ public class Card {
         Card other = (Card) o;
         
 		return this.name.equals(other.getName());
+	}
+
+	@Override
+	public String toString() {
+		return "Card [name=" + name + "]";
 	}
 }

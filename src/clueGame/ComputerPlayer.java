@@ -19,7 +19,6 @@ public class ComputerPlayer extends Player{
 			if(cell.isDoorway() && cell.getInitial() != this.lastRoom){
 				return cell;
 			}
-			System.out.println("");
 		}
 		
 		//if that didn't work, then choose an option at random

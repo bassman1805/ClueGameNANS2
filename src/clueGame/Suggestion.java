@@ -3,6 +3,11 @@ package clueGame;
 public class Suggestion{
 	Card person;
 	Card room;
+	@Override
+	public String toString() {
+		return "Suggestion [person=" + person + ", room=" + room + ", weapon=" + weapon + "]";
+	}
+
 	Card weapon;
 	
 	public Suggestion(Card person, Card room, Card weapon){
