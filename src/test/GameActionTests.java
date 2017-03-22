@@ -135,7 +135,7 @@ public class GameActionTests {
 		//Testing hand that has no cards relating to suggestion
 		for(int i = 0; i < 100; i++){
 			results.add(p0.disproveSuggestion(guess));
-		}
+		}                         
 		assertEquals(results.size(), 1);
 		assertTrue(results.contains(null));
 		results.clear();
