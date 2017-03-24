@@ -1,4 +1,4 @@
-
+//Nick Attarian and Nick Smith
 package clueGame;
 
 import java.awt.Color;
